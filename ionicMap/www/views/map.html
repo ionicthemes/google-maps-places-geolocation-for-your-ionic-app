@@ -1,10 +1,15 @@
 <ion-view>
     <ion-content>
       <div>
-       <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()"  places-auto-complete />
+        <label class="item item-input">
+          <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()"  places-auto-complete >
+        </label>
       </div>
+
       <div data-tap-disabled="true">
-        <ng-map zoom="15" center="[{{latitude}}, {{longitude}}]"></ng-map>
+        <ng-map zoom="15" center="[{{latitude}}, {{longitude}}]">
+          <marker position="{{latitude}}, {{longitude}}"></marker>
+        </ng-map>
       </div>
     </ion-content>
 </ion-view>

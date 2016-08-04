@@ -26,8 +26,10 @@ angular.module('controllers', [])
 
   $scope.placeChanged = function() {
     vmap.place = this.getPlace();
-    console.log('location', vmap.place.geometry.location);
+    console.log('location', vmap.place.geometry.location.lat());
     vmap.map.setCenter(vmap.place.geometry.location);
+    $scope.latitude = vmap.place.geometry.location.lat();
+    $scope.longitude = vmap.place.geometry.location.lng();
   }
   })
 });
