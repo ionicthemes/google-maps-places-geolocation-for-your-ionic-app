@@ -3,13 +3,22 @@
     <h1 class="title">Ionic Map</h1>
   </ion-header-bar>
   <ion-content>
+    <div class="row">
+      <div class="col">
+        <button class="button button-block button-positive" ng-click="centerOnCurrentPosition()">
+          Try the Geo Location feature!
+        </button>
+      </div>
+    </div>
+
     <div>
       <label class="item item-input">
-        <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()"  places-auto-complete >
+        <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()" places-auto-complete>
       </label>
     </div>
     <div data-tap-disabled="true">
-      <ng-map class="map" zoom="15" center="[{{latitude}}, {{longitude}}]">
+      <ng-map class="map" zoom="13" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false">
+      <!-- <ng-map class="map" zoom="13" center="[{{latitude}}, {{longitude}}]"> -->
         <marker ng-if="searchMarker" position="{{searchMarker.latitude}}, {{searchMarker.longitude}}" ng-mouseover="mouseover()" ng-mouseleave="mouseleave()"></marker>
         <custom-marker ng-repeat="cm in customMarkers" position="{{cm.address}}" on-mouseover="mouseover()" on-mouseout="mouseout()" on-click="click()">
           <div class="{{cm.class}}"><div> Custom Marker {{cm.name}}</div></div>
