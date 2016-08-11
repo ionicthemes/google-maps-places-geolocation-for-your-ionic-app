@@ -10,15 +10,37 @@
         </button>
       </div>
     </div>
-
-    <div>
-      <label class="item item-input">
-        <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()" places-auto-complete>
-      </label>
+    <div class="row">
+      <div class="col">
+        <div class="list list-inset">
+          <label class="item item-input search-box">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input ng-model="search.input" type="text" placeholder="Search" ng-change="getPlacePredictions(search.input)"/>
+          </label>
+        </div>
+        <!-- <label class="item item-input">
+          <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()" places-auto-complete>
+        </label> -->
+      </div>
+    </div>
+    <div ng-show="predictions.length > 0" class="row search-results">
+      <div class="col">
+        <div class="list location-results-list">
+          <a ng-repeat="prediction in predictions" class="item item-icon-left location-item" ng-click="selectSearchResult(prediction)">
+            <i class="icon ion-location"></i>
+            <h3 class="location-name">{{prediction.terms[0].value}}</h3>
+            <span class="location-desc">{{prediction.description}}</span>
+          </a>
+        </div>
+      </div>
     </div>
     <div data-tap-disabled="true">
-      <ng-map class="map" zoom="13" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false">
+      <ng-map class="map" zoom="13" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false" map-initialized="init(map)">
       <!-- <ng-map class="map" zoom="13" center="[{{latitude}}, {{longitude}}]"> -->
+        <!-- <custom-control id="go-home" position="TOP_RIGHT" index="1" on-click="vmap.centerOnCurrentPosition()"> -->
+        <!-- <custom-control id="go-home" position="TOP_RIGHT" index="1">
+          <div style="background-color: black; color:#fff;cursor:pointer; margin:10px">Go Home</div>
+        </custom-control> -->
         <marker ng-if="searchMarker" position="{{searchMarker.latitude}}, {{searchMarker.longitude}}" ng-mouseover="mouseover()" ng-mouseleave="mouseleave()"></marker>
         <custom-marker ng-repeat="cm in customMarkers" position="{{cm.address}}" on-mouseover="mouseover()" on-mouseout="mouseout()" on-click="click()">
           <div class="{{cm.class}}"><div> Custom Marker {{cm.name}}</div></div>
