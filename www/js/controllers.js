@@ -1,9 +1,27 @@
 angular.module('controllers', [])
 
+.controller('PlaceCtrl', function($scope, place){
+  $scope.place = place;
+})
+
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, NgMap, $ionicLoading, GooglePlacesService){
   // Central Park location
-  $scope.latitude = 40.785091;
-  $scope.longitude = -73.968285;
+  var central_park = {
+    lat: 40.785091,
+    lng: -73.968285
+  };
+  $scope.customMarkers = [
+    {
+      lat: central_park.lat,
+      lng: central_park.lng,
+      class: "custom-marker",
+      text: "Central Park"
+    }
+  ];
+
+  // Init position
+  $scope.latitude = central_park.lat;
+  $scope.longitude = central_park.lng;
 
   // Google Places search
   $scope.search = { input: '' };
@@ -18,11 +36,33 @@ angular.module('controllers', [])
   var vmap = this;
   vmap.dynMarkers = [];
 
+  var showPlaceInfo = function(place){
+    // alert(place);
+    console.log(place);
+    $state.go('place', {placeId: place.place_id});
+  };
+
   var createMarker = function(place){
-    var placeLoc = place.geometry.location;
+    // Custom image for marker
+    var custom_marker_image = {
+      url: '../img/ionic_marker.png',
+      // This marker is 20 pixels wide by 32 pixels high.
+      size: new google.maps.Size(30, 30),
+      // The origin for this image is (0, 0).
+      origin: new google.maps.Point(0, 0),
+      // The anchor for this image is the base of the flagpole at (0, 32).
+      anchor: new google.maps.Point(0, 30)
+    };
+
     var marker = new google.maps.Marker({
       map: vmap.map,
-      position: place.geometry.location
+      position: place.geometry.location,
+      icon: custom_marker_image,
+      animation: google.maps.Animation.DROP
+    });
+
+    marker.addListener('click', function() {
+      showPlaceInfo(place);
     });
 
     vmap.dynMarkers.push(marker);
@@ -89,16 +129,12 @@ angular.module('controllers', [])
 
   });
 
-  $scope.customMarkers = [
-          {address: "1600 pennsylvania ave, washington DC", "class": "customMarkers", "name": "marker1"},
-          {address: "600 pennsylvania ave, washington DC",  "class": "customMarkers", "name": "marker2"},
-        ];
-  $scope.placeChanged = function() {
-    vmap.place = this.getPlace();
-    vmap.map.setCenter(vmap.place.geometry.location);
-    $scope.searchMarker={"latitude": vmap.place.geometry.location.lat(),
-                        "longitude": vmap.place.geometry.location.lng()}
-  }
+  // $scope.placeChanged = function() {
+  //   vmap.place = this.getPlace();
+  //   vmap.map.setCenter(vmap.place.geometry.location);
+  //   $scope.searchMarker={"latitude": vmap.place.geometry.location.lat(),
+  //                       "longitude": vmap.place.geometry.location.lng()}
+  // }
 
   $scope.centerOnCurrentPosition = function(){
     var options = {
@@ -112,6 +148,25 @@ angular.module('controllers', [])
       $ionicLoading.hide().then(function(){
         $scope.latitude = position.coords.latitude;
         $scope.longitude = position.coords.longitude;
+
+        // Custom image for marker
+        var custom_marker_image = {
+          url: '../img/ionic_marker.png',
+          // This marker is 20 pixels wide by 32 pixels high.
+          size: new google.maps.Size(30, 30),
+          // The origin for this image is (0, 0).
+          origin: new google.maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+          anchor: new google.maps.Point(0, 30)
+        };
+
+        var marker = new google.maps.Marker({
+          map: vmap.map,
+          position: {lat: position.coords.latitude, lng: position.coords.longitude},
+          icon: custom_marker_image,
+          animation: google.maps.Animation.DROP
+        });
+
       });
     });
   };

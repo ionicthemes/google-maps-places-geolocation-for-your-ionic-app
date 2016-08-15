@@ -40,8 +40,11 @@ angular.module('services', [])
   };
 
 	this.getPlacesNearby = function(map, location){
+		// As we are already using a map, we don't need to pass the map element to the PlacesServices (https://groups.google.com/forum/#!topic/google-maps-js-api-v3/QJ67k-ATuFg)
 		var dfd = $q.defer(),
-    		service = new google.maps.places.PlacesService(map);
+				elem = document.createElement("div"),
+    		service = new google.maps.places.PlacesService(elem);
+    		// service = new google.maps.places.PlacesService(map);
 
 		// debugger;
 
@@ -74,6 +77,30 @@ angular.module('services', [])
     //       dfd.resolve(predictions);
     //     }
     //   });
+    return dfd.promise;
+  };
+
+	this.getPlaceDetails = function(placeId){
+		// As we are already using a map, we don't need to pass the map element to the PlacesServices (https://groups.google.com/forum/#!topic/google-maps-js-api-v3/QJ67k-ATuFg)
+		var dfd = $q.defer(),
+				elem = document.createElement("div"),
+    		service = new google.maps.places.PlacesService(elem);
+
+		// debugger;
+
+		// service = new google.maps.places.PlacesService(map);
+		service.getDetails({
+	    placeId: placeId
+	  }, function(place, status){
+			// debugger;
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+		    dfd.resolve(place);
+		  }
+			else {
+				dfd.resolve(null);
+			}
+		});
+
     return dfd.promise;
   };
 })

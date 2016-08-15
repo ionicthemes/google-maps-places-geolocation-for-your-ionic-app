@@ -38,5 +38,22 @@ angular.module('starter', [
     controller: 'MapCtrl'
   })
 
+  .state('place', {
+    url: '/place/:placeId',
+    templateUrl: "views/place.html",
+    controller: 'PlaceCtrl',
+    resolve: {
+      place: function($stateParams, GooglePlacesService) {
+        // debugger;
+        // var place = {};
+        // place.id = $stateParams.placeId;
+        // place.name = "pepe";
+        // return place;
+
+        return GooglePlacesService.getPlaceDetails($stateParams.placeId);
+      }
+    }
+  })
+
   $urlRouterProvider.otherwise('/map');
 })

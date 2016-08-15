@@ -1,7 +1,4 @@
-<ion-view>
-  <ion-header-bar class="bar-stable">
-    <h1 class="title">Ionic Map</h1>
-  </ion-header-bar>
+<ion-view view-title="Ionic Map">
   <ion-content>
     <div class="row">
       <div class="col">
@@ -42,8 +39,8 @@
           <div style="background-color: black; color:#fff;cursor:pointer; margin:10px">Go Home</div>
         </custom-control> -->
         <marker ng-if="searchMarker" position="{{searchMarker.latitude}}, {{searchMarker.longitude}}" ng-mouseover="mouseover()" ng-mouseleave="mouseleave()"></marker>
-        <custom-marker ng-repeat="cm in customMarkers" position="{{cm.address}}" on-mouseover="mouseover()" on-mouseout="mouseout()" on-click="click()">
-          <div class="{{cm.class}}"><div> Custom Marker {{cm.name}}</div></div>
+        <custom-marker ng-repeat="cm in customMarkers" position="[{{cm.lat}}, {{cm.lng}}]" class="{{cm.class}}" on-mouseover="mouseover()" on-mouseout="mouseout()" on-click="click()">
+          <h3 class="marker-title">{{cm.text}}</h3>
         </custom-marker>
       </ng-map>
     </div>
