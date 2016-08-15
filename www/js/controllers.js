@@ -15,6 +15,9 @@ angular.module('controllers', [])
     $scope.$apply();
   };
 
+  var vmap = this;
+  vmap.dynMarkers = [];
+
   var createMarker = function(place){
     var placeLoc = place.geometry.location;
     var marker = new google.maps.Marker({
@@ -22,13 +25,15 @@ angular.module('controllers', [])
       position: place.geometry.location
     });
 
+    vmap.dynMarkers.push(marker);
+
     // google.maps.event.addListener(marker, 'click', function() {
     //   infowindow.setContent(place.name);
     //   infowindow.open(map, this);
     // });
   };
 
-  var vmap = this;
+
   NgMap.getMap().then(function(map){
     // var options = {timeout: 10000, enableHighAccuracy: true};
     vmap.map = map;
@@ -37,6 +42,50 @@ angular.module('controllers', [])
     //   $scope.longitude = position.coords.longitude;
     // })
 
+    // vmap.dynMarkers = [];
+
+    vmap.createCluster = function(){
+      var markerClusterer = new MarkerClusterer(vmap.map, vmap.dynMarkers, {
+        styles: [
+          {
+            url: '../img/i1.png',
+            height: 53,
+            width: 52,
+            textColor: '#FFF',
+            textSize: 12
+          },
+          {
+            url: '../img/i2.png',
+            height: 56,
+            width: 55,
+            textColor: '#FFF',
+            textSize: 12
+          },
+          {
+            url: '../img/i3.png',
+            height: 66,
+            width: 65,
+            textColor: '#FFF',
+            textSize: 12
+          },
+          {
+            url: '../img/i4.png',
+            height: 78,
+            width: 77,
+            textColor: '#FFF',
+            textSize: 12
+          },
+          {
+            url: '../img/i5.png',
+            height: 90,
+            width: 89,
+            textColor: '#FFF',
+            textSize: 12
+          }
+        ],
+        imagePath: '../img/i'
+      });
+    };
 
   });
 
@@ -103,6 +152,9 @@ angular.module('controllers', [])
 		      createMarker(nearby_places[i]);
 		    }
 
+        // Create cluster with places
+        vmap.createCluster();
+
         // debugger;
         var neraby_places_bound_center = bound.getCenter();
         // console.log(bound.getCenter());
@@ -110,6 +162,9 @@ angular.module('controllers', [])
         // Center map based on the bound arround nearby places
         $scope.latitude = neraby_places_bound_center.lat();
         $scope.longitude = neraby_places_bound_center.lng();
+
+        // To fit map with places
+        vmap.map.fitBounds(bound);
       });
     });
   };

@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "ngCordova": "^0.1.27-alpha",
-    "ngmap": "^1.17.3"
+    "ngmap": "^1.17.3",
+    "js-marker-clusterer": "*"
   }
 }

@@ -48,10 +48,10 @@ angular.module('services', [])
 		// service = new google.maps.places.PlacesService(map);
 		service.nearbySearch({
 	    location: location,
-	    radius: '500',
-	    types: ['store']
+	    radius: '1000',
+	    types: ['restaurant']
 	  }, function(results, status){
-			debugger;
+			// debugger;
 			if (status != google.maps.places.PlacesServiceStatus.OK) {
 		    dfd.resolve([]);
 		  }
