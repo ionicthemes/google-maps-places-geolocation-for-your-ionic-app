@@ -4,7 +4,7 @@ angular.module('controllers', [])
   $scope.place = place;
 })
 
-.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, NgMap, $ionicLoading, GooglePlacesService){
+.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $ionicLoading, GooglePlacesService){
   // Central Park location
   var central_park = {
     lat: 40.785091,
@@ -169,6 +169,10 @@ angular.module('controllers', [])
     $scope.search.input = result.description;
     $scope.predictions = [];
 
+    $ionicLoading.show({
+      template: 'Searching restaurants near '+result.description+' ...'
+    });
+
     // With this result we should find restaurants arround this place and then show them in the map
     // First we need to get LatLng from the place ID
     GooglePlacesService.getLatLng(result.place_id)
@@ -179,27 +183,29 @@ angular.module('controllers', [])
         // Clean map
         cleanMap();
 
-        // Create a location bound to center the map based on the results
-        var bound = new google.maps.LatLngBounds(),
-            places_markers = [];
+        $ionicLoading.hide().then(function(){
+          // Create a location bound to center the map based on the results
+          var bound = new google.maps.LatLngBounds(),
+              places_markers = [];
 
-        for (var i = 0; i < nearby_places.length; i++) {
-		      bound.extend(nearby_places[i].geometry.location);
-		      var place_marker = createMarker(nearby_places[i]);
-          places_markers.push(place_marker);
-		    }
+          for (var i = 0; i < nearby_places.length; i++) {
+  		      bound.extend(nearby_places[i].geometry.location);
+  		      var place_marker = createMarker(nearby_places[i]);
+            places_markers.push(place_marker);
+  		    }
 
-        // Create cluster with places
-        createCluster(places_markers);
+          // Create cluster with places
+          createCluster(places_markers);
 
-        var neraby_places_bound_center = bound.getCenter();
+          var neraby_places_bound_center = bound.getCenter();
 
-        // Center map based on the bound arround nearby places
-        $scope.latitude = neraby_places_bound_center.lat();
-        $scope.longitude = neraby_places_bound_center.lng();
+          // Center map based on the bound arround nearby places
+          $scope.latitude = neraby_places_bound_center.lat();
+          $scope.longitude = neraby_places_bound_center.lng();
 
-        // To fit map with places
-        $scope.mymap.fitBounds(bound);
+          // To fit map with places
+          $scope.mymap.fitBounds(bound);
+        });
       });
     });
   };

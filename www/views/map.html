@@ -1,39 +1,41 @@
 <ion-view view-title="Ionic Map">
-  <ion-content>
-    <div class="row">
-      <div class="col">
-        <button class="button button-block button-positive" ng-click="tryGeoLocation()">
+  <ion-content class="example-content">
+    <div class="row geolocation-row">
+      <div class="col col-center">
+        <button class="geolocation-button button button-block button-positive" ng-click="tryGeoLocation()">
           Try the Geo Location feature!
         </button>
       </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <div class="list list-inset">
-          <label class="item item-input search-box">
-            <i class="icon ion-ios-search placeholder-icon"></i>
-            <input ng-model="search.input" type="text" placeholder="Search" ng-change="getPlacePredictions(search.input)"/>
-          </label>
+    <div class="row row-no-padding map-row">
+      <div class="col map-col">
+        <div class="search-container">
+          <div class="list list-inset search-input-outer">
+            <label class="item item-input search-box">
+              <i class="icon ion-ios-search placeholder-icon"></i>
+              <input ng-model="search.input" type="text" placeholder="Search restaurants near place" ng-change="getPlacePredictions(search.input)"/>
+            </label>
+          </div>
+          <div ng-show="predictions.length > 0" class="row row-no-padding search-results">
+            <div class="col">
+              <div class="list location-results-list">
+                <a ng-repeat="prediction in predictions" class="item item-icon-left location-item" ng-click="selectSearchResult(prediction)">
+                  <i class="icon ion-location"></i>
+                  <h3 class="location-name">{{prediction.terms[0].value}}</h3>
+                  <span class="location-desc">{{prediction.description}}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="map-container" data-tap-disabled="true">
+          <ng-map class="map" zoom="14" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false" map-initialized="init(map)">
+            <custom-marker ng-repeat="cm in customMarkers" position="[{{cm.lat}}, {{cm.lng}}]" class="{{cm.class}}">
+              <h3 class="marker-title">{{cm.text}}</h3>
+            </custom-marker>
+          </ng-map>
         </div>
       </div>
-    </div>
-    <div ng-show="predictions.length > 0" class="row search-results">
-      <div class="col">
-        <div class="list location-results-list">
-          <a ng-repeat="prediction in predictions" class="item item-icon-left location-item" ng-click="selectSearchResult(prediction)">
-            <i class="icon ion-location"></i>
-            <h3 class="location-name">{{prediction.terms[0].value}}</h3>
-            <span class="location-desc">{{prediction.description}}</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div data-tap-disabled="true">
-      <ng-map class="map" zoom="14" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false" map-initialized="init(map)">
-        <custom-marker ng-repeat="cm in customMarkers" position="[{{cm.lat}}, {{cm.lng}}]" class="{{cm.class}}">
-          <h3 class="marker-title">{{cm.text}}</h3>
-        </custom-marker>
-      </ng-map>
     </div>
   </ion-content>
 </ion-view>

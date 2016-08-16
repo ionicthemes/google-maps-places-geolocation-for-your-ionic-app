@@ -1,13 +1,67 @@
-// .scroll
-// {
-//   height: 100%;
-// }
-//
-// .map
-// {
-//   width: 100%;
-//   height: 100%;
-// }
+$map-height: 85%;
+
+.example-content
+{
+  .scroll
+  {
+    height: 100%;
+  }
+}
+
+.geolocation-row
+{
+  @include calc(height, "(100% - #{$map-height})");
+
+  .geolocation-button
+  {
+    margin: 0px;
+  }
+}
+
+.map-row
+{
+  height: $map-height;
+  margin: 0px !important;
+
+  .map-col
+  {
+    position: relative;
+  }
+
+  .search-container
+  {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+
+    .search-input-outer
+    {
+      margin: 10px;
+      margin-bottom: 0px;
+    }
+
+    .search-results
+    {
+      padding: 10px;
+      padding-top: 0px;
+    }
+  }
+
+  .map-container
+  {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
+    .map
+    {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
 
 .custom-marker
 {
