@@ -39,7 +39,8 @@ angular.module('services', [])
     return dfd.promise;
   };
 
-	this.getPlacesNearby = function(map, location){
+	// this.getPlacesNearby = function(map, location){
+	this.getPlacesNearby = function(location){
 		// As we are already using a map, we don't need to pass the map element to the PlacesServices (https://groups.google.com/forum/#!topic/google-maps-js-api-v3/QJ67k-ATuFg)
 		var dfd = $q.defer(),
 				elem = document.createElement("div"),

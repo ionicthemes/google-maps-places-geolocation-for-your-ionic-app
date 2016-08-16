@@ -10,6 +10,7 @@ angular.module('controllers', [])
     lat: 40.785091,
     lng: -73.968285
   };
+
   $scope.customMarkers = [
     {
       lat: central_park.lat,
@@ -19,7 +20,7 @@ angular.module('controllers', [])
     }
   ];
 
-  // Init position
+  // Init the center position for the map
   $scope.latitude = central_park.lat;
   $scope.longitude = central_park.lng;
 
@@ -27,107 +28,150 @@ angular.module('controllers', [])
   $scope.search = { input: '' };
   $scope.predictions = [];
 
+  // Keep track of every marker we create. That way we can remove them when needed
+  $scope.markers_collection = [];
+
   // To properly init the google map with angular js
   $scope.init = function(map) {
+    // debugger;
     $scope.mymap = map;
     $scope.$apply();
   };
 
-  var vmap = this;
-  vmap.dynMarkers = [];
+  // var vmap = this;
+  // vmap.dynMarkers = [];
 
   var showPlaceInfo = function(place){
-    // alert(place);
-    console.log(place);
-    $state.go('place', {placeId: place.place_id});
-  };
+        $state.go('place', {placeId: place.place_id});
+      },
+      createMarker = function(place){
+        // Custom image for marker
+        var custom_marker_image = {
+          url: '../img/ionic_marker.png',
+          size: new google.maps.Size(30, 30),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(0, 30)
+        };
 
-  var createMarker = function(place){
-    // Custom image for marker
-    var custom_marker_image = {
-      url: '../img/ionic_marker.png',
-      // This marker is 20 pixels wide by 32 pixels high.
-      size: new google.maps.Size(30, 30),
-      // The origin for this image is (0, 0).
-      origin: new google.maps.Point(0, 0),
-      // The anchor for this image is the base of the flagpole at (0, 32).
-      anchor: new google.maps.Point(0, 30)
-    };
+        var marker = new google.maps.Marker({
+          // map: vmap.map,
+          map: $scope.mymap,
+          // if place geometry , else (use lat, lng)
+          position: place.geometry.location,
+          icon: custom_marker_image,
+          animation: google.maps.Animation.DROP
+        });
 
-    var marker = new google.maps.Marker({
-      map: vmap.map,
-      position: place.geometry.location,
-      icon: custom_marker_image,
-      animation: google.maps.Animation.DROP
-    });
+        // if place-id
+        marker.addListener('click', function() {
+          showPlaceInfo(place);
+        });
 
-    marker.addListener('click', function() {
-      showPlaceInfo(place);
-    });
+        $scope.markers_collection.push(marker);
+        // vmap.dynMarkers.push(marker);
 
-    vmap.dynMarkers.push(marker);
+        return marker;
+      },
+      createCluster = function(markers){
+        var markerClusterer = new MarkerClusterer($scope.mymap, markers, {
+          styles: [
+            {
+              url: '../img/i1.png',
+              height: 53,
+              width: 52,
+              textColor: '#FFF',
+              textSize: 12
+            },
+            {
+              url: '../img/i2.png',
+              height: 56,
+              width: 55,
+              textColor: '#FFF',
+              textSize: 12
+            },
+            {
+              url: '../img/i3.png',
+              height: 66,
+              width: 65,
+              textColor: '#FFF',
+              textSize: 12
+            },
+            {
+              url: '../img/i4.png',
+              height: 78,
+              width: 77,
+              textColor: '#FFF',
+              textSize: 12
+            },
+            {
+              url: '../img/i5.png',
+              height: 90,
+              width: 89,
+              textColor: '#FFF',
+              textSize: 12
+            }
+          ],
+          imagePath: '../img/i'
+        });
+      };
 
-    // google.maps.event.addListener(marker, 'click', function() {
-    //   infowindow.setContent(place.name);
-    //   infowindow.open(map, this);
-    // });
-  };
 
 
-  NgMap.getMap().then(function(map){
-    // var options = {timeout: 10000, enableHighAccuracy: true};
-    vmap.map = map;
-    // $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    //   $scope.latitude = position.coords.latitude;
-    //   $scope.longitude = position.coords.longitude;
-    // })
-
-    // vmap.dynMarkers = [];
-
-    vmap.createCluster = function(){
-      var markerClusterer = new MarkerClusterer(vmap.map, vmap.dynMarkers, {
-        styles: [
-          {
-            url: '../img/i1.png',
-            height: 53,
-            width: 52,
-            textColor: '#FFF',
-            textSize: 12
-          },
-          {
-            url: '../img/i2.png',
-            height: 56,
-            width: 55,
-            textColor: '#FFF',
-            textSize: 12
-          },
-          {
-            url: '../img/i3.png',
-            height: 66,
-            width: 65,
-            textColor: '#FFF',
-            textSize: 12
-          },
-          {
-            url: '../img/i4.png',
-            height: 78,
-            width: 77,
-            textColor: '#FFF',
-            textSize: 12
-          },
-          {
-            url: '../img/i5.png',
-            height: 90,
-            width: 89,
-            textColor: '#FFF',
-            textSize: 12
-          }
-        ],
-        imagePath: '../img/i'
-      });
-    };
-
-  });
+  // NgMap.getMap().then(function(map){
+  //   // debugger;
+  //   // var options = {timeout: 10000, enableHighAccuracy: true};
+  //   vmap.map = map;
+  //   // $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+  //   //   $scope.latitude = position.coords.latitude;
+  //   //   $scope.longitude = position.coords.longitude;
+  //   // })
+  //
+  //   // vmap.dynMarkers = [];
+  //
+  //   // vmap.createCluster = function(){
+  //   //   var markerClusterer = new MarkerClusterer(vmap.map, vmap.dynMarkers, {
+  //   //     styles: [
+  //   //       {
+  //   //         url: '../img/i1.png',
+  //   //         height: 53,
+  //   //         width: 52,
+  //   //         textColor: '#FFF',
+  //   //         textSize: 12
+  //   //       },
+  //   //       {
+  //   //         url: '../img/i2.png',
+  //   //         height: 56,
+  //   //         width: 55,
+  //   //         textColor: '#FFF',
+  //   //         textSize: 12
+  //   //       },
+  //   //       {
+  //   //         url: '../img/i3.png',
+  //   //         height: 66,
+  //   //         width: 65,
+  //   //         textColor: '#FFF',
+  //   //         textSize: 12
+  //   //       },
+  //   //       {
+  //   //         url: '../img/i4.png',
+  //   //         height: 78,
+  //   //         width: 77,
+  //   //         textColor: '#FFF',
+  //   //         textSize: 12
+  //   //       },
+  //   //       {
+  //   //         url: '../img/i5.png',
+  //   //         height: 90,
+  //   //         width: 89,
+  //   //         textColor: '#FFF',
+  //   //         textSize: 12
+  //   //       }
+  //   //     ],
+  //   //     imagePath: '../img/i'
+  //   //   });
+  //   // };
+  //
+  // });
 
   // $scope.placeChanged = function() {
   //   vmap.place = this.getPlace();
@@ -137,14 +181,13 @@ angular.module('controllers', [])
   // }
 
   $scope.centerOnCurrentPosition = function(){
-    var options = {
-      timeout: 10000,
-      enableHighAccuracy: true
-    };
     $ionicLoading.show({
       template: 'Getting current position ...'
     });
-    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $cordovaGeolocation.getCurrentPosition({
+      timeout: 10000,
+      enableHighAccuracy: true
+    }).then(function(position){
       $ionicLoading.hide().then(function(){
         $scope.latitude = position.coords.latitude;
         $scope.longitude = position.coords.longitude;
@@ -152,16 +195,13 @@ angular.module('controllers', [])
         // Custom image for marker
         var custom_marker_image = {
           url: '../img/ionic_marker.png',
-          // This marker is 20 pixels wide by 32 pixels high.
           size: new google.maps.Size(30, 30),
-          // The origin for this image is (0, 0).
           origin: new google.maps.Point(0, 0),
-          // The anchor for this image is the base of the flagpole at (0, 32).
           anchor: new google.maps.Point(0, 30)
         };
 
         var marker = new google.maps.Marker({
-          map: vmap.map,
+          map: $scope.mymap,
           position: {lat: position.coords.latitude, lng: position.coords.longitude},
           icon: custom_marker_image,
           animation: google.maps.Animation.DROP
@@ -196,19 +236,21 @@ angular.module('controllers', [])
       // result_location.lng()
       // debugger;
 
-      GooglePlacesService.getPlacesNearby(vmap.map, result_location)
+      GooglePlacesService.getPlacesNearby(result_location)
       .then(function(nearby_places){
         // Create a location bound to center the map based on the results
-        var bound = new google.maps.LatLngBounds();
+        var bound = new google.maps.LatLngBounds(),
+            places_markers = [];
 
         for (var i = 0; i < nearby_places.length; i++) {
           // debugger;
 		      bound.extend(nearby_places[i].geometry.location);
-		      createMarker(nearby_places[i]);
+		      var place_marker = createMarker(nearby_places[i]);
+          places_markers.push(place_marker);
 		    }
 
         // Create cluster with places
-        vmap.createCluster();
+        createCluster(places_markers);
 
         // debugger;
         var neraby_places_bound_center = bound.getCenter();
@@ -219,7 +261,7 @@ angular.module('controllers', [])
         $scope.longitude = neraby_places_bound_center.lng();
 
         // To fit map with places
-        vmap.map.fitBounds(bound);
+        $scope.mymap.fitBounds(bound);
       });
     });
   };

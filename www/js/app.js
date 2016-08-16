@@ -44,12 +44,6 @@ angular.module('starter', [
     controller: 'PlaceCtrl',
     resolve: {
       place: function($stateParams, GooglePlacesService) {
-        // debugger;
-        // var place = {};
-        // place.id = $stateParams.placeId;
-        // place.name = "pepe";
-        // return place;
-
         return GooglePlacesService.getPlaceDetails($stateParams.placeId);
       }
     }
