@@ -2,7 +2,7 @@
   <ion-content>
     <div class="row">
       <div class="col">
-        <button class="button button-block button-positive" ng-click="centerOnCurrentPosition()">
+        <button class="button button-block button-positive" ng-click="tryGeoLocation()">
           Try the Geo Location feature!
         </button>
       </div>
@@ -15,9 +15,6 @@
             <input ng-model="search.input" type="text" placeholder="Search" ng-change="getPlacePredictions(search.input)"/>
           </label>
         </div>
-        <!-- <label class="item item-input">
-          <input type="text" placeholder="Search" ng-model="location.address" on-place-changed="placeChanged()" places-auto-complete>
-        </label> -->
       </div>
     </div>
     <div ng-show="predictions.length > 0" class="row search-results">
@@ -33,13 +30,7 @@
     </div>
     <div data-tap-disabled="true">
       <ng-map class="map" zoom="14" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false" map-initialized="init(map)">
-      <!-- <ng-map class="map" zoom="13" center="[{{latitude}}, {{longitude}}]"> -->
-        <!-- <custom-control id="go-home" position="TOP_RIGHT" index="1" on-click="vmap.centerOnCurrentPosition()"> -->
-        <!-- <custom-control id="go-home" position="TOP_RIGHT" index="1">
-          <div style="background-color: black; color:#fff;cursor:pointer; margin:10px">Go Home</div>
-        </custom-control> -->
-        <marker ng-if="searchMarker" position="{{searchMarker.latitude}}, {{searchMarker.longitude}}" ng-mouseover="mouseover()" ng-mouseleave="mouseleave()"></marker>
-        <custom-marker ng-repeat="cm in customMarkers" position="[{{cm.lat}}, {{cm.lng}}]" class="{{cm.class}}" on-mouseover="mouseover()" on-mouseout="mouseout()" on-click="click()">
+        <custom-marker ng-repeat="cm in customMarkers" position="[{{cm.lat}}, {{cm.lng}}]" class="{{cm.class}}">
           <h3 class="marker-title">{{cm.text}}</h3>
         </custom-marker>
       </ng-map>
