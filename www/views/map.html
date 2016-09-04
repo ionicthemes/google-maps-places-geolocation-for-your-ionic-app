@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="map-container" data-tap-disabled="true">
-          <ng-map class="map" zoom="14" center="[{{latitude}}, {{longitude}}]" pan-control="false" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false" map-initialized="init(map)">
+          <ng-map class="map" zoom="14" center="[{{latitude}}, {{longitude}}]" zoom-control="true" scale-control="false" map-type-control="false" street-view-control="false" map-initialized="init(map)">
             <custom-marker ng-repeat="cm in customMarkers" position="[{{cm.lat}}, {{cm.lng}}]" class="{{cm.class}}">
               <h3 class="marker-title">{{cm.text}}</h3>
             </custom-marker>
