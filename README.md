@@ -1,4 +1,6 @@
-You may think, do we really need yet another ionic maps tutorial? Yes we do. In this tutorial we are going to cover how to implement Google maps inside an ionic app, but in a way that goes much deeper than all the posts and tutorials you may find around the web on this topic.
+##Add Google Maps, Places, and Geolocation to an Ionic App
+
+You may think, **do we really need yet another ionic maps tutorial? Yes we do.** In this tutorial we are going to cover how to implement Google maps inside an ionic app, but in a way that goes much deeper than all the posts and tutorials you may find around the web on this topic.
 
 In this tutorial we merged three of the most common cases around location based apps (maps, geolocation and places) into one functional and coherent/comprehensive example so you can master the concepts behind location based apps.
 
